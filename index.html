@@ -18,44 +18,52 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
 
-    <!-- HEADER / HERO BRANDING AREA -->
-    <header class="bg-gradient-to-r from-[##0c3b66] to-[#05213d] text-white shadow-md border-b-4 border-sky-400">
-        <div class="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-4">
+    <!-- HIGH-VISIBILITY HEADER / HERO BRANDING AREA -->
+    <header class="bg-gradient-to-r from-[#0c3b66] to-[#05213d] text-white shadow-lg border-b-4 border-sky-400 py-6">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-5 w-full md:w-auto">
                 
                 <!-- BRAND EMBLEM EMBED (REPLICA LOGO) -->
-                <div class="bg-white p-2 rounded-xl shadow-inner flex flex-col items-center justify-center w-16 h-16 shrink-0 relative border border-slate-200">
+                <div class="bg-white p-2 rounded-2xl shadow-md flex flex-col items-center justify-center w-20 h-20 shrink-0 relative border-2 border-sky-300">
                     <!-- Graduation Cap Top -->
-                    <div class="w-10 h-3 bg-[#0d3b66] rounded-sm transform rotate-0 relative -mt-1">
+                    <div class="w-12 h-3.5 bg-[#0d3b66] rounded-sm transform rotate-0 relative -mt-1">
                         <div class="absolute inset-0 bg-[#0d3b66] transform rotate-45 scale-75"></div>
                     </div>
                     <!-- Cap Base band -->
-                    <div class="w-6 h-2 bg-[#0d3b66] rounded-t-sm mt-0.5 z-10"></div>
+                    <div class="w-7 h-2.5 bg-[#0d3b66] rounded-t-sm mt-0.5 z-10"></div>
                     <!-- Tassel -->
-                    <div class="absolute right-3 top-7 w-0.5 h-3 bg-[#0d3b66]">
+                    <div class="absolute right-4 top-9 w-0.5 h-3.5 bg-[#0d3b66]">
                         <div class="w-1 h-1.5 bg-[#0d3b66] rounded-full mt-2 -ml-0.5"></div>
                     </div>
                     <!-- Pin Location Shield and Checkmark -->
-                    <div class="w-7 h-7 bg-[#0d3b66] rounded-full mt-0.5 flex items-center justify-center rounded-br-none transform rotate-45 relative top-[-2px]">
-                        <div class="w-5 h-5 bg-[#3a9ad9] rounded-full flex items-center justify-center">
-                            <!-- Check icon counter-rotated to look upright -->
-                            <i class="fa-solid fa-check text-white text-[9px] transform -rotate-45 font-black"></i>
+                    <div class="w-8 h-8 bg-[#0d3b66] rounded-full mt-0.5 flex items-center justify-center rounded-br-none transform rotate-45 relative top-[-2px]">
+                        <div class="w-6 h-6 bg-[#3a9ad9] rounded-full flex items-center justify-center">
+                            <i class="fa-solid fa-check text-white text-[10px] transform -rotate-45 font-black"></i>
                         </div>
                     </div>
                 </div>
 
-                <!-- TITLE SEGMENT -->
+                <!-- ENHANCED BOLD TITLE SEGMENT -->
                 <div>
-                    <div class="flex items-baseline gap-1">
-                        <h1 class="text-2xl font-black tracking-tight text-white">Path<span class="text-sky-400">Finder</span><span class="text-white">:</span></h1>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <h1 class="text-4xl font-extrabold tracking-tight text-white drop-shadow-sm">
+                            Path<span class="text-sky-400">Finder</span>
+                        </h1>
+                        <span class="bg-sky-500/20 border border-sky-400/40 text-sky-300 font-mono text-[11px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
+                            AIM Program Portal
+                        </span>
                     </div>
-                    <p class="text-xs text-slate-300 font-semibold tracking-wide">A Guide for Shifting Students</p>
+                    <p class="text-sm text-slate-200 font-bold tracking-wide mt-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-graduation-cap text-sky-400"></i> Curriculum Shifting Guide & Transition Matrix
+                    </p>
+                    <p class="text-xs text-slate-400 font-semibold">Ateneo de Naga University</p>
                 </div>
             </div>
             
-            <div class="no-print">
-                <span class="bg-sky-950/80 border border-sky-800 px-4 py-2 rounded-xl text-xs font-bold text-sky-300 block shadow-sm">
-                    <i class="fa-solid fa-shield-cat mr-1 text-sky-400"></i> Active Curriculum Audit Node
+            <!-- PORTAL STATUS BADGE -->
+            <div class="no-print self-end md:self-center">
+                <span class="bg-sky-950 border-2 border-sky-500/50 px-5 py-2.5 rounded-xl text-xs font-black text-sky-300 block shadow-md tracking-wider uppercase">
+                    <i class="fa-solid fa-shuffle mr-1.5 text-sky-400"></i> BSA $\rightarrow$ BSBA-FMA Track
                 </span>
             </div>
         </div>
@@ -67,7 +75,7 @@
         <!-- USER PROFILE DEFINITION SECTION -->
         <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 mb-8 print-card">
             <h2 class="text-base font-bold text-slate-900 mb-4 flex items-center gap-2 pb-2 border-b">
-                <i class="fa-solid fa-id-card text-[#0d3b66]"></i> Target Student Profile
+                <i class="fa-solid fa-id-card text-[#0d3b66]"></i> Shifting Track Profile (AIM Program)
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
@@ -75,9 +83,9 @@
                     <input type="text" id="student-id" placeholder="e.g., 2023-11045" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none transition text-sm font-medium">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Target Track Curriculum</label>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Current & Target Program</label>
                     <select id="target-program" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none bg-white text-sm font-semibold text-slate-700">
-                        <option value="BSBA-FMA">Financial Management and Accounting (FMA) Track</option>
+                        <option value="BSA-to-FMA">Accountancy (BSA) $\rightarrow$ BSBA Financial Management & Accounting</option>
                     </select>
                 </div>
                 <div class="flex items-end">
@@ -100,7 +108,7 @@
                     <span class="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">Interactive Audit</span>
                 </div>
                 <p class="text-xs text-slate-500 mb-4 bg-sky-50/50 p-2.5 rounded-xl border border-sky-100 text-justify">
-                    <i class="fa-solid fa-circle-info text-sky-600 mr-1"></i> Toggle courses you have completed. PathFinder matching matrices execute cross-crediting and advanced accounting overrides instantly.
+                    <i class="fa-solid fa-circle-info text-sky-600 mr-1"></i> Toggle completed Accountancy subjects. The transition system handles summer loads and advanced accounting course credits instantly.
                 </p>
 
                 <!-- CHECKLIST TARGET WRAPPER -->
@@ -118,7 +126,7 @@
                     <div class="bg-gradient-to-br from-[#0d3b66] to-[#05213d] text-white rounded-2xl shadow-xl p-6 relative overflow-hidden print-card">
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10">
                             <div>
-                                <span class="bg-sky-400 text-slate-950 text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full">Live Curriculum Audit</span>
+                                <span class="bg-sky-400 text-slate-950 text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full">AIM Shifting Audit Matrix</span>
                                 <h3 class="text-xl font-bold mt-1 text-white" id="report-title">BSA to BSBA FMA Road Map</h3>
                                 <p class="text-xs text-slate-300 mt-0.5">Student Academic ID Validation: <span id="lbl-student-id" class="font-mono font-bold text-sky-300"></span></p>
                             </div>
@@ -143,7 +151,7 @@
                     <!-- TRACK DEFICIENCY GAP MATRIX -->
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 print-card">
                         <h3 class="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2 pb-2 border-b">
-                            <i class="fa-solid fa-triangle-exclamation text-amber-500"></i> Remaining Requirements to Complete
+                            <i class="fa-solid fa-triangle-exclamation text-amber-500"></i> Remaining Requirements & Summer Deficiencies
                         </h3>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse">
@@ -179,7 +187,7 @@
 
     <footer class="bg-slate-950 text-slate-500 text-[11px] py-6 mt-12 border-t border-slate-900 no-print">
         <div class="container mx-auto px-4 text-center space-y-1">
-            <p class="font-bold text-slate-400">PathFinder: A Guide for Shifting Students</p>
+            <p class="font-bold text-slate-400">PathFinder: A Guide for Shifting Students (AIM Program)</p>
             <p>System engines operate strictly according to localized administrative cross-program policies.</p>
         </div>
     </footer>
@@ -428,20 +436,20 @@
             };
             gaps.sort((x, y) => (sequenceWeights[x.term] || 99) - (sequenceWeights[y.term] || 99));
 
-            let historicalDeficits = gaps.filter(g => g.term.includes("1st Year") || g.term.includes("2nd Year")).length;
+            let historicalDeficits = gaps.filter(g => g.term.includes("1st Year") || g.term.includes("2nd Year") || g.term.includes("Summer")).length;
 
             let advisoryMarkup = `
                 <h4 class="font-bold flex items-center gap-1.5 text-slate-900 text-xs">
-                    <i class="fa-solid fa-shield-halved text-sky-700"></i> Track Regularization Analytics:
+                    <i class="fa-solid fa-shield-halved text-sky-700"></i> Track Regularization Analytics (AIM Matrix):
                 </h4>
                 <ul class="list-disc list-inside text-[11px] mt-2 space-y-1 text-slate-700">
-                    <li><span class="font-semibold text-sky-950">Advanced Override Rules Loaded:</span> Intermediate Accounting credits safely satisfy Financial Accounting 1 and 2 sequence boundaries.</li>
+                    <li><span class="font-semibold text-sky-950">AIM Program Overrides Enabled:</span> Core accounting foundational structures align seamlessly. Intermediate Accounting clears primary higher blocks.</li>
             `;
 
             if (historicalDeficits > 0) {
                 advisoryMarkup += `
                     <li class="text-rose-900 font-bold bg-rose-50 border border-rose-200/60 p-2 rounded-lg mt-2">
-                        <i class="fa-solid fa-triangle-exclamation mr-1 text-rose-600"></i> Critical Deficit Warning: Lower-year curriculum gaps require early attention during upcoming Intersession/Summer terms to maintain regular standing.
+                        <i class="fa-solid fa-triangle-exclamation mr-1 text-rose-600"></i> Summer & Lower-Year Deficit: Detected unfulfilled core summer modules or lower year blocks. Prioritize tracking these items during the incoming Intersession terms.
                     </li>`;
             } else {
                 advisoryMarkup += `<li class="text-emerald-900 font-bold bg-emerald-50 border border-emerald-100 p-2 rounded-lg mt-2"><i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Checkpoint complete. Proceed using standardized milestone sequence routing.</li>`;
@@ -459,9 +467,9 @@
                 `;
             } else {
                 gaps.forEach(gap => {
-                    let isHistorical = gap.term.includes("1st Year") || gap.term.includes("2nd Year");
-                    let containerStyle = isHistorical ? "bg-rose-50 border border-rose-100 text-rose-700 font-bold" : "bg-sky-50 border border-sky-100 text-sky-800 font-medium";
-                    let recommendation = isHistorical ? "Prioritize during incoming Intersession" : `Take during regular ${gap.term}`;
+                    let isSummerOrHistory = gap.term.includes("1st Year") || gap.term.includes("2nd Year") || gap.term.includes("Summer");
+                    let containerStyle = gap.term.includes("Summer") ? "bg-amber-50 border border-amber-200 text-amber-800 font-bold" : (isSummerOrHistory ? "bg-rose-50 border border-rose-100 text-rose-700 font-bold" : "bg-sky-50 border border-sky-100 text-sky-800 font-medium");
+                    let recommendation = gap.term.includes("Summer") ? `Take during designated ${gap.term} Term` : (isSummerOrHistory ? "Prioritize during incoming Intersession" : `Take during regular ${gap.term}`);
 
                     const element = document.createElement('tr');
                     element.className = "hover:bg-slate-50/60 transition";
