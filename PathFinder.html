@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PathFinder - Shifting Advisory System</title>
+    <!-- Tailwind CSS for high-fidelity UI layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for standard structural UI icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @media print {
+            .no-print { display: none !important; }
+            .print-card { border: 1px solid #cbd5e1 !important; box-shadow: none !important; padding: 12px !important; }
+            body { background-color: white !important; color: black !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- HEADER / HERO BRANDING AREA -->
+    <header class="bg-gradient-to-r from-[##0c3b66] to-[#05213d] text-white shadow-md border-b-4 border-sky-400">
+        <div class="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                
+                <!-- BRAND EMBLEM EMBED (REPLICA LOGO) -->
+                <div class="bg-white p-2 rounded-xl shadow-inner flex flex-col items-center justify-center w-16 h-16 shrink-0 relative border border-slate-200">
+                    <!-- Graduation Cap Top -->
+                    <div class="w-10 h-3 bg-[#0d3b66] rounded-sm transform rotate-0 relative -mt-1">
+                        <div class="absolute inset-0 bg-[#0d3b66] transform rotate-45 scale-75"></div>
+                    </div>
+                    <!-- Cap Base band -->
+                    <div class="w-6 h-2 bg-[#0d3b66] rounded-t-sm mt-0.5 z-10"></div>
+                    <!-- Tassel -->
+                    <div class="absolute right-3 top-7 w-0.5 h-3 bg-[#0d3b66]">
+                        <div class="w-1 h-1.5 bg-[#0d3b66] rounded-full mt-2 -ml-0.5"></div>
+                    </div>
+                    <!-- Pin Location Shield and Checkmark -->
+                    <div class="w-7 h-7 bg-[#0d3b66] rounded-full mt-0.5 flex items-center justify-center rounded-br-none transform rotate-45 relative top-[-2px]">
+                        <div class="w-5 h-5 bg-[#3a9ad9] rounded-full flex items-center justify-center">
+                            <!-- Check icon counter-rotated to look upright -->
+                            <i class="fa-solid fa-check text-white text-[9px] transform -rotate-45 font-black"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TITLE SEGMENT -->
+                <div>
+                    <div class="flex items-baseline gap-1">
+                        <h1 class="text-2xl font-black tracking-tight text-white">Path<span class="text-sky-400">Finder</span><span class="text-white">:</span></h1>
+                    </div>
+                    <p class="text-xs text-slate-300 font-semibold tracking-wide">A Guide for Shifting Students</p>
+                </div>
+            </div>
+            
+            <div class="no-print">
+                <span class="bg-sky-950/80 border border-sky-800 px-4 py-2 rounded-xl text-xs font-bold text-sky-300 block shadow-sm">
+                    <i class="fa-solid fa-shield-cat mr-1 text-sky-400"></i> Active Curriculum Audit Node
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN BODY INTERFACE -->
+    <main class="container mx-auto px-4 py-8 flex-grow max-w-7xl">
+        
+        <!-- USER PROFILE DEFINITION SECTION -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 mb-8 print-card">
+            <h2 class="text-base font-bold text-slate-900 mb-4 flex items-center gap-2 pb-2 border-b">
+                <i class="fa-solid fa-id-card text-[#0d3b66]"></i> Target Student Profile
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Student Identification Number</label>
+                    <input type="text" id="student-id" placeholder="e.g., 2023-11045" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none transition text-sm font-medium">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Target Track Curriculum</label>
+                    <select id="target-program" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none bg-white text-sm font-semibold text-slate-700">
+                        <option value="BSBA-FMA">Financial Management and Accounting (FMA) Track</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button onclick="calculatePathways()" class="w-full bg-[#0d3b66] hover:bg-[#05213d] text-white font-bold text-sm py-2.5 px-4 rounded-xl transition shadow-md flex items-center justify-center gap-2 no-print">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Synthesize Curriculum Map
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TWO COLUMN INTERACTIVE INTERFACE -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- LEFT AREA: SELECTION SIDEBAR -->
+            <section class="lg:col-span-5 bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 print-card no-print">
+                <div class="flex justify-between items-center mb-3 border-b pb-2">
+                    <h2 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-emerald-600"></i> Passed BSA Base Courses
+                    </h2>
+                    <span class="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">Interactive Audit</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-4 bg-sky-50/50 p-2.5 rounded-xl border border-sky-100 text-justify">
+                    <i class="fa-solid fa-circle-info text-sky-600 mr-1"></i> Toggle courses you have completed. PathFinder matching matrices execute cross-crediting and advanced accounting overrides instantly.
+                </p>
+
+                <!-- CHECKLIST TARGET WRAPPER -->
+                <div id="bsa-checklist-box" class="space-y-4 max-h-[68vh] overflow-y-auto pr-1">
+                    <!-- Dynamically rendered via initializeChecklist() -->
+                </div>
+            </section>
+
+            <!-- RIGHT AREA: EVALUATION VISUALIZER -->
+            <section class="lg:col-span-7 space-y-6">
+                
+                <div id="evaluation-output" class="hidden space-y-6">
+                    
+                    <!-- SUMMARY STATS SHEET -->
+                    <div class="bg-gradient-to-br from-[#0d3b66] to-[#05213d] text-white rounded-2xl shadow-xl p-6 relative overflow-hidden print-card">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10">
+                            <div>
+                                <span class="bg-sky-400 text-slate-950 text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full">Live Curriculum Audit</span>
+                                <h3 class="text-xl font-bold mt-1 text-white" id="report-title">BSA to BSBA FMA Road Map</h3>
+                                <p class="text-xs text-slate-300 mt-0.5">Student Academic ID Validation: <span id="lbl-student-id" class="font-mono font-bold text-sky-300"></span></p>
+                            </div>
+                            <div class="bg-white/10 backdrop-blur-sm px-4 py-3 rounded-xl border border-white/10 text-center min-w-[140px]">
+                                <span class="block text-[10px] uppercase tracking-wider text-slate-300 font-medium">Time-to-Degree</span>
+                                <span class="text-lg font-black text-sky-300" id="lbl-est-time">--</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 pt-4 border-t border-white/10 flex flex-wrap gap-3 no-print">
+                            <button onclick="window.print()" class="bg-sky-900/60 hover:bg-sky-900 text-white border border-sky-700 px-3 py-1.5 rounded-lg font-bold text-xs transition flex items-center gap-1.5 shadow-sm">
+                                <i class="fa-solid fa-print text-sky-400"></i> Print or Save PDF Advisory
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- RE-ENTRY ADVISORY BANNER -->
+                    <div id="status-advisory" class="bg-amber-50/60 border-l-4 border-amber-500 text-amber-900 p-4 rounded-xl shadow-sm border border-amber-200/40 print-card">
+                        <!-- Re-entry flags logic frame attaches here -->
+                    </div>
+
+                    <!-- TRACK DEFICIENCY GAP MATRIX -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 print-card">
+                        <h3 class="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2 pb-2 border-b">
+                            <i class="fa-solid fa-triangle-exclamation text-amber-500"></i> Remaining Requirements to Complete
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-500 text-[10px] uppercase tracking-wider border-b border-slate-100">
+                                        <th class="py-2.5 px-3 font-bold">Course Code</th>
+                                        <th class="py-2.5 px-3 font-bold">Course Title</th>
+                                        <th class="py-2.5 px-3 font-bold text-center">Units</th>
+                                        <th class="py-2.5 px-3 font-bold">Strategic Timeline Advice</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="deficiency-table-body" class="text-xs divide-y divide-slate-100 text-slate-700">
+                                    <!-- Dynamic rows append reactive to configuration states -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- EMPTY STATE VIEW SCREEN -->
+                <div id="empty-state" class="bg-white rounded-2xl border-2 border-dashed border-slate-200 p-12 text-center shadow-sm">
+                    <div class="w-16 h-16 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-[#0d3b66] text-xl shadow-inner">
+                        <i class="fa-solid fa-compass-drafting animate-spin" style="animation-duration: 4s;"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-slate-800">Ready for Mapping Matrix</h3>
+                    <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto">Select your finished items in the checklist block on the left sidebar pane and execute the layout synthesizer tool.</p>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <footer class="bg-slate-950 text-slate-500 text-[11px] py-6 mt-12 border-t border-slate-900 no-print">
+        <div class="container mx-auto px-4 text-center space-y-1">
+            <p class="font-bold text-slate-400">PathFinder: A Guide for Shifting Students</p>
+            <p>System engines operate strictly according to localized administrative cross-program policies.</p>
+        </div>
+    </footer>
+
+    <!-- ENGINE CODE LOADER -->
+    <script>
+        const bsaCurriculum = [
+            { id: "1Y1S", title: "First Year - 1st Semester", courses: [
+                { code: "THEN100", name: "Introduction to Catholic Faith", units: 3 },
+                { code: "CBAR101", name: "Fundamentals of Business", units: 3 },
+                { code: "PHIS101", name: "Understanding the Self", units: 3 },
+                { code: "ENGS101", name: "Purposive Communication", units: 3 },
+                { code: "MTHS101", name: "Mathematics in the Modern World", units: 3 },
+                { code: "CBAC101", name: "Operations Management & TQM", units: 3 },
+                { code: "ACCA100", name: "ACC Fundamentals of Accounting", units: 6 },
+                { code: "ACOT101", name: "Managerial Economics", units: 3 },
+                { code: "PFIT101", name: "Physical Activities Toward Health and Fitness 1", units: 2 },
+                { code: "CIFP101", name: "ADNU Culture and Spirituality", units: 1.5 },
+                { code: "CRCP001", name: "College SRA 1", units: 1.5 }
+            ]},
+            { id: "1Y2S", title: "First Year - 2nd Semester", courses: [
+                { code: "THEN101", name: "Christian Discipleship Today", units: 3 },
+                { code: "PHIN101", name: "Logical and Critical Thinking", units: 3 },
+                { code: "ACCA102", name: "ACC Conceptual Framework and Accounting Standards", units: 3 },
+                { code: "ACCA103", name: "Financial Accounting and Reporting", units: 3 },
+                { code: "ACCA104", name: "Intermediate Accounting 1", units: 6 },
+                { code: "CAED104", name: "New IT Application Tools in Business", units: 3 },
+                { code: "ACCL101", name: "ACC Law on Obligations and Contracts", units: 3 },
+                { code: "ACOT102", name: "Economic Development", units: 3 },
+                { code: "PFIT102", name: "Physical Activities Toward Health and Fitness 2", units: 2 },
+                { code: "CIFP102", name: "ADNU's Social Mission and Formation", units: 1.5 },
+                { code: "CRCP002", name: "College SRA 2", units: 1.5 }
+            ]},
+            { id: "2Y1S", title: "Second Year - 1st Semester", courses: [
+                { code: "PHIN102", name: "Philosophical Anthropology", units: 3 },
+                { code: "GE_E1", name: "GE Elective 1", units: 3 },
+                { code: "CAED102", name: "Financial Markets", units: 3 },
+                { code: "ACCA106", name: "Intermediate Accounting 2", units: 6 },
+                { code: "ACCA105", name: "Cost Accounting and Control", units: 3 },
+                { code: "ACCL102", name: "Business Laws and Regulations", units: 3 },
+                { code: "ACCA113", name: "ACC Accounting Information Systems", units: 3 },
+                { code: "PFIT103", name: "Physical Activities Toward Health and Fitness 3", units: 2 },
+                { code: "NSTP101", name: "National Service Training Program (CWTS) I", units: 3 },
+                { code: "CRCP003", name: "College SRA 3", units: 1.5 }
+            ]},
+            { id: "2Y2S", title: "Second Year - 2nd Semester", courses: [
+                { code: "PHIS102", name: "Ethics", units: 3 },
+                { code: "SOCS102", name: "Readings in Philippine History", units: 3 },
+                { code: "GE_E2", name: "GE Elective 2", units: 3 },
+                { code: "ACCL103", name: "Regulatory Framework and Legal Issues in Business", units: 3 },
+                { code: "ACCA107", name: "Strategic Cost Management", units: 3 },
+                { code: "ACCA108", name: "Intermediate Accounting 3", units: 3 },
+                { code: "ACCA109", name: "Governance, Bus Ethics, Risk Mngt, and Internal Control", units: 3 },
+                { code: "ACCA110", name: "ACC Financial Management", units: 3 },
+                { code: "PFIT104", name: "Physical Activities Toward Health and Fitness 4", units: 2 },
+                { code: "NSTP102", name: "National Service Training Program (CWTS) II", units: 3 },
+                { code: "CRCP004", name: "College SRA 4", units: 1.5 }
+            ]}
+        ];
+
+        const fmaCurriculumMap = [
+            // First Year Sem 1
+            { code: "THEN100", name: "Introduction to Catholic Faith", units: 3, term: "1st Year - 1st Sem" },
+            { code: "CBAR101", name: "Fundamentals of Business", units: 3, term: "1st Year - 1st Sem" },
+            { code: "PHIS101", name: "Understanding the Self", units: 3, term: "1st Year - 1st Sem" },
+            { code: "ENGS101", name: "Purposive Communication", units: 3, term: "1st Year - 1st Sem" },
+            { code: "BACC101", name: "Basic Microeconomics", units: 3, term: "1st Year - 1st Sem" },
+            { code: "BACC106", name: "Human Resource Management", units: 3, term: "1st Year - 1st Sem" },
+            { code: "FMCC100", name: "FMC Fundamentals of Accounting", units: 6, term: "1st Year - 1st Sem" },
+            { code: "PFIT101", name: "Physical Activities Towards Health and Fitness 1", units: 2, term: "1st Year - 1st Sem" },
+            { code: "CIFP101", name: "ADNU Culture and Spirituality", units: 1.5, term: "1st Year - 1st Sem" },
+            { code: "CRCP001", name: "College SRA 1", units: 1.5, term: "1st Year - 1st Sem" },
+
+            // First Year Sem 2
+            { code: "THEN101", name: "Christian Discipleship Today", units: 3, term: "1st Year - 2nd Sem" },
+            { code: "PHIN101", name: "Logical and Critical Thinking", units: 3, term: "1st Year - 2nd Sem" },
+            { code: "NSCS101", name: "Science, Technology & Society", units: 3, term: "1st Year - 2nd Sem" },
+            { code: "MTHS101", name: "Mathematics in the Modern World", units: 3, term: "1st Year - 2nd Sem" },
+            { code: "CAED104", name: "New IT Application Tools in Business", units: 3, term: "1st Year - 2nd Sem" },
+            { code: "FMCC118", name: "Accounting for Partnership Corporation", units: 3, term: "1st Year - 2nd Sem" },
+            { code: "CBAC101", name: "Operations Management & TQM", units: 3, term: "1st Year - 2nd Sem" },
+            { code: "PFIT102", name: "Physical Activities Towards Health and Fitness 2", units: 2, term: "1st Year - 2nd Sem" },
+            { code: "CIFP102", name: "ADNU'S Social Mission and Formation", units: 1.5, term: "1st Year - 2nd Sem" },
+            { code: "CRCP002", name: "College SRA 2", units: 1.5, term: "1st Year - 2nd Sem" },
+
+            // Second Year Sem 1
+            { code: "PHIN102", name: "Philosophical Anthropology", units: 3, term: "2nd Year - 1st Sem" },
+            { code: "SOCS101", name: "Art Appreciation", units: 3, term: "2nd Year - 1st Sem" },
+            { code: "FMCL210", name: "FMC Law on Obligations and Contracts", units: 3, term: "2nd Year - 1st Sem" },
+            { code: "FMCC126", name: "Financial Accounting 1", units: 6, term: "2nd Year - 1st Sem" },
+            { code: "FMAC224", name: "Investment and Portfolio", units: 3, term: "2nd Year - 1st Sem" },
+            { code: "PFIT103", name: "Physical Activities Towards Health and Fitness 3", units: 2, term: "2nd Year - 1st Sem" },
+            { code: "NSTP101", name: "National Service Training Program (CWTS) I", units: 3, term: "2nd Year - 1st Sem" },
+            { code: "CRCP003", name: "College SRA 3", units: 1.5, term: "2nd Year - 1st Sem" },
+
+            // Second Year Sem 2
+            { code: "PHIS102", name: "Ethics", units: 3, term: "2nd Year - 2nd Sem" },
+            { code: "GE_E1", name: "GE Elective 1", units: 3, term: "2nd Year - 2nd Sem" },
+            { code: "SOCS102", name: "Readings in Philippine History", units: 3, term: "2nd Year - 2nd Sem" },
+            { code: "FMCC227", name: "FMC Cost and Accounting Control", units: 3, term: "2nd Year - 2nd Sem" },
+            { code: "FMCC212", name: "Financial Accounting 2", units: 6, term: "2nd Year - 2nd Sem" },
+            { code: "FMAC227", name: "Financial Analysis & Reporting", units: 3, term: "2nd Year - 2nd Sem" },
+            { code: "PFIT104", name: "Physical Activities Towards Health and Fitness 4", units: 2, term: "2nd Year - 2nd Sem" },
+            { code: "NSTP102", name: "National Service Training Program (CWTS) II", units: 3, term: "2nd Year - 2nd Sem" },
+            { code: "CRCP004", name: "College SRA 4", units: 1.5, term: "2nd Year - 2nd Sem" },
+
+            // Second Year Summer
+            { code: "CBAC103", name: "Statistical Analysis with Software Application", units: 3, term: "2nd Year - Summer" },
+            { code: "CBAC102", name: "Strategic Management", units: 3, term: "2nd Year - Summer" },
+
+            // Third Year Sem 1
+            { code: "PHIN103", name: "Philosophy of Religion", units: 3, term: "3rd Year - 1st Sem" },
+            { code: "SOCS103", name: "The Contemporary World", units: 3, term: "3rd Year - 1st Sem" },
+            { code: "BACC104", name: "Good Governance and Social Responsibility", units: 3, term: "3rd Year - 1st Sem" },
+            { code: "FMBR301", name: "Business Research 1", units: 3, term: "3rd Year - 1st Sem" },
+            { code: "FMCT311", name: "FMC Income Taxation", units: 3, term: "3rd Year - 1st Sem" },
+            { code: "FMCC221", name: "FMC International Business and Trade", units: 3, term: "3rd Year - 1st Sem" },
+            { code: "FMAC312", name: "Banking and Financial Institutions", units: 3, term: "3rd Year - 1st Sem" },
+            { code: "FMAC315", name: "FMA Financial Management", units: 3, term: "3rd Year - 1st Sem" },
+
+            // Third Year Sem 2
+            { code: "THEN102", name: "Christian Moral Paradigm", units: 3, term: "3rd Year - 2nd Sem" },
+            { code: "GE_E2", name: "GE Elective 2", units: 3, term: "3rd Year - 2nd Sem" },
+            { code: "FMCL310", name: "FMC Business Legal Issues and Regulatory Framework", units: 3, term: "3rd Year - 2nd Sem" },
+            { code: "FMCT312", name: "FMC Business Taxation", units: 3, term: "3rd Year - 2nd Sem" },
+            { code: "FMBR302", name: "Business Research 2", units: 3, term: "3rd Year - 2nd Sem" },
+            { code: "FMAC328", name: "Credit and Collection", units: 3, term: "3rd Year - 2nd Sem" },
+            { code: "FMAC329", name: "Monetary Policy and Central Banking", units: 3, term: "3rd Year - 2nd Sem" },
+
+            // Third Year Summer
+            { code: "PROF_E1", name: "Professional Elective 1", units: 3, term: "3rd Year - Summer" },
+            { code: "PROF_E2", name: "Professional Elective 2", units: 3, term: "3rd Year - Summer" },
+
+            // Fourth Year Sem 1
+            { code: "THEN103", name: "Christian Vocation, Love, Family, Life, and Society", units: 3, term: "4th Year - 1st Sem" },
+            { code: "SOCS104", name: "The Life and Works of Rizal", units: 3, term: "4th Year - 1st Sem" },
+            { code: "FMCE401", name: "FMC Business Ethics", units: 3, term: "4th Year - 1st Sem" },
+            { code: "FMAC415", name: "Capital Market", units: 3, term: "4th Year - 1st Sem" },
+            { code: "FMAC417", name: "Financial Controllership", units: 3, term: "4th Year - 1st Sem" },
+            { code: "FMAP491", name: "FMA Practicum 1 (300 hours)", units: 3, term: "4th Year - 1st Sem" },
+
+            // Fourth Year Sem 2
+            { code: "GE_E3", name: "GE Elective 3", units: 3, term: "4th Year - 2nd Sem" },
+            { code: "FMAP492", name: "FMA Practicum 2 (300 hours)", units: 3, term: "4th Year - 2nd Sem" },
+            { code: "PROF_E3", name: "Professional Elective 3", units: 3, term: "4th Year - 2nd Sem" },
+            { code: "PROF_E4", name: "Professional Elective 4", units: 3, term: "4th Year - 2nd Sem" }
+        ];
+
+        function initializeChecklist() {
+            const container = document.getElementById('bsa-checklist-box');
+            container.innerHTML = '';
+
+            bsaCurriculum.forEach(semester => {
+                const block = document.createElement('div');
+                block.className = "bg-slate-50 border border-slate-200 p-3 rounded-xl shadow-sm";
+                
+                let markup = `
+                    <div class="font-bold text-xs text-slate-700 border-b border-slate-200/60 pb-2 mb-2 flex justify-between items-center">
+                        <span>${semester.title}</span>
+                        <button onclick="toggleBlockSelection('${semester.id}', true)" class="text-[10px] text-sky-700 font-bold hover:underline">Select Block</button>
+                    </div>
+                    <div class="space-y-1.5">
+                `;
+
+                semester.courses.forEach(course => {
+                    markup += `
+                        <label class="flex items-start gap-2.5 text-xs text-slate-600 hover:text-slate-900 cursor-pointer p-1 rounded-md hover:bg-white transition">
+                            <input type="checkbox" name="bsa-cleared" value="${course.code}" class="mt-0.5 rounded text-sky-700 focus:ring-sky-400 chk-sem-${semester.id}">
+                            <div>
+                                <span class="font-mono font-bold text-slate-900">[${course.code}]</span> ${course.name}
+                                <span class="text-[10px] text-slate-400 block font-mono">${course.units} Units</span>
+                            </div>
+                        </label>
+                    `;
+                });
+
+                markup += `</div>`;
+                block.innerHTML = markup;
+                container.appendChild(block);
+            });
+        }
+
+        function toggleBlockSelection(blockId, state) {
+            document.querySelectorAll(`.chk-sem-${blockId}`).forEach(el => el.checked = state);
+        }
+
+        function calculatePathways() {
+            const idInput = document.getElementById('student-id').value.trim() || "UNSPECIFIED";
+            const selectedBoxes = document.querySelectorAll('input[name="bsa-cleared"]:checked');
+            const clearedBsaCodes = Array.from(selectedBoxes).map(box => box.value);
+
+            const crossCreditRules = {
+                "THEN100": ["THEN100"], "THEN101": ["THEN101"], "PHIS101": ["PHIS101"], "ENGS101": ["ENGS101"],
+                "MTHS101": ["MTHS101"], "CBAC101": ["CBAC101"], "PFIT101": ["PFIT101"], "CIFP101": ["CIFP101"],
+                "CRCP001": ["CRCP001"], "PHIN101": ["PHIN101"], "CAED104": ["CAED104"], "PFIT102": ["PFIT102"],
+                "CIFP102": ["CIFP102"], "CRCP002": ["CRCP002"], "PHIN102": ["PHIN102"], "PFIT103": ["PFIT103"],
+                "NSTP101": ["NSTP101"], "CRCP003": ["CRCP003"], "PHIS102": ["PHIS102"], "SOCS102": ["SOCS102"],
+                "PFIT104": ["PFIT104"], "NSTP102": ["NSTP102"], "CRCP004": ["CRCP004"],
+                "GE_E1": ["GE_E1"], "GE_E2": ["GE_E2"],
+
+                "ACCA100": ["FMCC100"], 
+                "ACCL101": ["FMCL210"], 
+                "ACCA105": ["FMCC227"], 
+                "ACCL103": ["FMCL310"], 
+                "ACCA110": ["FMAC315"], 
+
+                "ACCA104": ["FMCC126", "FMCC212"], 
+                "ACCA106": ["FMCC126", "FMCC212"],
+                "ACCA108": ["FMCC126", "FMCC212"]
+            };
+
+            let generatedFmaCredits = [];
+            clearedBsaCodes.forEach(code => {
+                generatedFmaCredits.push(code);
+                if (crossCreditRules[code]) {
+                    generatedFmaCredits = generatedFmaCredits.concat(crossCreditRules[code]);
+                }
+            });
+
+            const anomalies = fmaCurriculumMap.filter(course => !generatedFmaCredits.includes(course.code));
+
+            renderOutputView(idInput, anomalies);
+        }
+
+        function renderOutputView(studentId, gaps) {
+            document.getElementById('empty-state').classList.add('hidden');
+            document.getElementById('evaluation-output').classList.remove('hidden');
+            document.getElementById('lbl-student-id').innerText = studentId;
+
+            const tableBody = document.getElementById('deficiency-table-body');
+            const advisoryFrame = document.getElementById('status-advisory');
+            tableBody.innerHTML = '';
+
+            let totalMissingUnits = gaps.reduce((acc, curr) => acc + curr.units, 0);
+            let timeProjection = "1 Year (Fast Track)";
+            if (totalMissingUnits > 55) timeProjection = "3 Years";
+            else if (totalMissingUnits > 26) timeProjection = "2 Years";
+            else if (totalMissingUnits > 12) timeProjection = "1.5 Years";
+            document.getElementById('lbl-est-time').innerText = timeProjection;
+
+            const sequenceWeights = { 
+                "1st Year - 1st Sem": 1, "1st Year - 2nd Sem": 2, 
+                "2nd Year - 1st Sem": 3, "2nd Year - 2nd Sem": 4, "2nd Year - Summer": 5, 
+                "3rd Year - 1st Sem": 6, "3rd Year - 2nd Sem": 7, "3rd Year - Summer": 8, 
+                "4th Year - 1st Sem": 9, "4th Year - 2nd Sem": 10 
+            };
+            gaps.sort((x, y) => (sequenceWeights[x.term] || 99) - (sequenceWeights[y.term] || 99));
+
+            let historicalDeficits = gaps.filter(g => g.term.includes("1st Year") || g.term.includes("2nd Year")).length;
+
+            let advisoryMarkup = `
+                <h4 class="font-bold flex items-center gap-1.5 text-slate-900 text-xs">
+                    <i class="fa-solid fa-shield-halved text-sky-700"></i> Track Regularization Analytics:
+                </h4>
+                <ul class="list-disc list-inside text-[11px] mt-2 space-y-1 text-slate-700">
+                    <li><span class="font-semibold text-sky-950">Advanced Override Rules Loaded:</span> Intermediate Accounting credits safely satisfy Financial Accounting 1 and 2 sequence boundaries.</li>
+            `;
+
+            if (historicalDeficits > 0) {
+                advisoryMarkup += `
+                    <li class="text-rose-900 font-bold bg-rose-50 border border-rose-200/60 p-2 rounded-lg mt-2">
+                        <i class="fa-solid fa-triangle-exclamation mr-1 text-rose-600"></i> Critical Deficit Warning: Lower-year curriculum gaps require early attention during upcoming Intersession/Summer terms to maintain regular standing.
+                    </li>`;
+            } else {
+                advisoryMarkup += `<li class="text-emerald-900 font-bold bg-emerald-50 border border-emerald-100 p-2 rounded-lg mt-2"><i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Checkpoint complete. Proceed using standardized milestone sequence routing.</li>`;
+            }
+            advisoryMarkup += `</ul>`;
+            advisoryFrame.innerHTML = advisoryMarkup;
+
+            if (gaps.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="py-8 text-center text-slate-400 font-medium text-xs">
+                            <i class="fa-solid fa-square-check text-emerald-500 mr-1"></i> Perfect alignment! All target curriculum requirements met.
+                        </td>
+                    </tr>
+                `;
+            } else {
+                gaps.forEach(gap => {
+                    let isHistorical = gap.term.includes("1st Year") || gap.term.includes("2nd Year");
+                    let containerStyle = isHistorical ? "bg-rose-50 border border-rose-100 text-rose-700 font-bold" : "bg-sky-50 border border-sky-100 text-sky-800 font-medium";
+                    let recommendation = isHistorical ? "Prioritize during incoming Intersession" : `Take during regular ${gap.term}`;
+
+                    const element = document.createElement('tr');
+                    element.className = "hover:bg-slate-50/60 transition";
+                    element.innerHTML = `
+                        <td class="py-3 px-3 font-mono font-bold text-slate-900">${gap.code}</td>
+                        <td class="py-3 px-3 text-slate-800 font-medium">${gap.name}</td>
+                        <td class="py-3 px-3 text-center font-mono text-slate-500">${gap.units}</td>
+                        <td class="py-3 px-3">
+                            <span class="px-2 py-0.5 rounded-md text-[10px] inline-block tracking-tight ${containerStyle}">
+                                ${recommendation}
+                            </span>
+                        </td>
+                    `;
+                    tableBody.appendChild(element);
+                });
+            }
+        }
+
+        window.onload = function() {
+            initializeChecklist();
+        };
+    </script>
+</body>
+</html>
